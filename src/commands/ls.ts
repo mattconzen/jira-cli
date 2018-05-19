@@ -31,7 +31,15 @@ export interface Issue {
     status: {
       description: string,
       name: string
-    }
+    },
+    assignee: {
+      self: string,
+      name: string,
+      key: string,
+      emailAddress: string,
+      displayName: string,
+      active: boolean
+    },
     issuetype: {
       self: string,
       id: number,
@@ -49,16 +57,34 @@ export default class Ls extends base {
 
   static flags = {
     help: flags.help({char: 'h'}),
+    all: flags.boolean({char: 'a'})
   }
 
   static args = [{name: 'file'}]
 
   async run() {
-    const {email, token, subdomain} = base.config
-    const uri = 'https://' + subdomain + '.atlassian.net/rest/api/2/search?jql=assignee=currentuser() AND resolution=Unresolved'
+    const flags = this.parse(Ls)
+    const {email, token, project, subdomain} = base.config
+    const uri = 'https://' + subdomain + '.atlassian.net/rest/api/2/search?jql= '
+
+    const assignedToCurrentUser = 'assignee=currentUser()'
+    const isOpen = 'resolution=Unresolved'
+    const inProject = 'project="' + project + '"'
+    const inOpenSprint = 'sprint in openSprints()'
+
+    const orderBy = ' ORDER BY key '
+
+    let query
+    switch (true) {
+        case flags.flags.all:
+          query = inProject + ' AND ' + inOpenSprint
+          break
+        default:
+          query = assignedToCurrentUser + ' AND ' + isOpen
+      }
 
     const result = await WebRequest.json<JiraResponse>(
-      encodeURI(uri), {
+      encodeURI(uri + query + orderBy), {
         auth: {
           user: email,
           password: token,
@@ -71,7 +97,7 @@ export default class Ls extends base {
       this.log(
         Colors.bold(issue.key) +
         ' : ' + Colors.cyan(issue.fields.issuetype.name) +
-        ' - ' + issue.fields.summary
+        ' - ' + issue.fields.summary + (issue.fields.assignee ? ' @' + Colors.bold(issue.fields.assignee.key) : Colors.red(' UNASSIGNED'))
       )
     }
 
