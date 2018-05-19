@@ -52,12 +52,22 @@ export interface Issue {
   }
 }
 
+export enum IssueType {
+  platform = 'Platform Task',
+  web = 'Web Task',
+  design = 'Design Task',
+  qa = 'QA Task',
+  story = 'Story',
+  epic = 'Epic'
+}
+
 export default class Ls extends base {
   static description = 'List your currently assigned tasks'
 
   static flags = {
     help: flags.help({char: 'h'}),
-    all: flags.boolean({char: 'a'})
+    all: flags.boolean({char: 'a'}),
+    type: flags.string({char: 't'})
   }
 
   static args = [{name: 'file'}]
@@ -74,14 +84,10 @@ export default class Ls extends base {
 
     const orderBy = ' ORDER BY key '
 
-    let query
-    switch (true) {
-        case flags.flags.all:
-          query = inProject + ' AND ' + inOpenSprint
-          break
-        default:
-          query = assignedToCurrentUser + ' AND ' + isOpen
-      }
+    let query = assignedToCurrentUser + ' AND ' + isOpen
+    if (flags.flags.all) {
+      query = inProject + ' AND ' + inOpenSprint
+    }
 
     const result = await WebRequest.json<JiraResponse>(
       encodeURI(uri + query + orderBy), {
@@ -94,12 +100,13 @@ export default class Ls extends base {
       }
     )
     for (const issue of result.issues) {
-      this.log(
-        Colors.bold(issue.key) +
-        ' : ' + Colors.cyan(issue.fields.issuetype.name) +
-        ' - ' + issue.fields.summary + (issue.fields.assignee ? ' @' + Colors.bold(issue.fields.assignee.key) : Colors.red(' UNASSIGNED'))
-      )
+      this.printIssue(issue)
     }
+  }
 
+  async printIssue(issue: Issue) {
+    this.log(Colors.bold(issue.key) +
+        ' : ' + Colors.cyan(issue.fields.issuetype.name) +
+        ' - ' + issue.fields.summary + (issue.fields.assignee ? ' @' + Colors.bold(issue.fields.assignee.key) : Colors.red(' UNASSIGNED')))
   }
 }
