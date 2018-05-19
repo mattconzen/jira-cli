@@ -23,12 +23,14 @@ USAGE
 <!-- usagestop -->
 # Setup
 You'll need a ~/.jirarc with:
-```{ 
+```
+ { 
   "email": "email@email.com",
   "token": "YOUR-ATLASSIAN-API-TOKEN",
   "project": "PROJ1", // Your default JIRA project shortname
   "subdomain": "ACOMPANY" // Your company's subdomain, i.e., https://ACOMPANY.alassian.net
-}```
+}
+```
 
 # Commands
 <!-- commands -->
