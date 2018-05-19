@@ -13,6 +13,7 @@
     "@oclif/plugin-help": "^1",
     "@types/fs-extra": "^5.0.2",
     "@types/request": "^2.47.0",
+    "colors": "^1.2.5",
     "fs-extra": "^6.0.1",
     "request": "^2.86.0",
     "tslib": "^1",

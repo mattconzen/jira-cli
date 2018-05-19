@@ -1,4 +1,5 @@
 import {flags} from '@oclif/command'
+import * as Colors from 'colors'
 import * as WebRequest from 'web-request'
 
 import base from '../base'
@@ -67,7 +68,11 @@ export default class Ls extends base {
       }
     )
     for (const issue of result.issues) {
-      this.log(issue.key + ':' + issue.fields.issuetype.name + ' - ' + issue.fields.summary)
+      this.log(
+        Colors.bold(issue.key) +
+        ' : ' + Colors.cyan(issue.fields.issuetype.name) +
+        ' - ' + issue.fields.summary
+      )
     }
 
   }
