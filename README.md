@@ -21,6 +21,17 @@ USAGE
 ...
 ```
 <!-- usagestop -->
+# Setup
+You'll need a ~/.jirarc with:
+```
+ { 
+  "email": "email@email.com",
+  "token": "YOUR-ATLASSIAN-API-TOKEN",
+  "project": "PROJ1", // Your default JIRA project shortname
+  "subdomain": "ACOMPANY" // Your company's subdomain, i.e., https://ACOMPANY.alassian.net
+}
+```
+
 # Commands
 <!-- commands -->
 * [`jira ls`](#jira-ls-file)
@@ -36,13 +47,24 @@ USAGE
 
 OPTIONS
   -h, --help       show CLI help
+  -a, --all        fetch all items in the current sprint, regardless of who's assigned
 
 EXAMPLE
   $ jira ls
-  PROJ-3513:Platform Task - Add scheduling support for stuff 
-  PROJ-1233:Bug - Add a Retryer around 502 responses from API 
-  PROJ-3593:Platform Task - Create logging interface for API requests 
-  DSGN-43:Design Task - Create new UI components for thingamabobs 
+  PROJ-3513: Platform Task - Add scheduling support for stuff @john
+  PROJ-1233: Bug - Add a Retryer around 502 responses from API @john
+  PROJ-3593: Platform Task - Create logging interface for API requests @john
+  DSGN-43: Design Task - Create new UI components for thingamabobs @john
+
+  $ jira ls -a
+  PROJ-3513: Platform Task - Add scheduling support for stuff @john
+  PROJ-1233: Bug - Add a Retryer around 502 responses from API @john
+  PROJ-3593: Platform Task - Create logging interface for API requests @john
+  DSGN-43: Design Task - Create new UI components for thingamabobs @john
+  PROJ-5913: Platform Task - Do some new endpoints @jane
+  PROJ-3311: Bug - Fix null pointer exception in caching layer @naomi
+  PROJ-5155: Platform Task - Prepare backend for webscale @yoshi
+  DSGN-43: Design Task - Redesign mobile apps @yashmeen
 ```
 
 _See code: [src/commands/ls.ts](https://github.com/mattconzen/jira-cli/blob/v0.0.1/src/commands/ls.ts)_
