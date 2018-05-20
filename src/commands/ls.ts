@@ -91,8 +91,6 @@ export default class Ls extends base {
       query = inProject + ' AND ' + inOpenSprint
     }
 
-    this.log(JSON.stringify(flags))
-
     const result = await WebRequest.json<JiraResponse>(
       encodeURI(uri + query + orderBy), {
         auth: {
@@ -104,16 +102,25 @@ export default class Ls extends base {
       }
     )
     try {
+      if (result.issues.length == 0) {
+        this.log(
+          `❌   Sorry, no issues were found with the given query:
+          \`${query}\``)
+        if (query.includes("openSprints")) {
+          this.log("Is there a currently open sprint? 🤔")
+        }
+      }
       for (const issue of result.issues) {
         if (flags.flags.detail) {
-          this.printIssueDetail(issue)
+          this.printIssueDetail(issue, false)
         } else {
           this.printIssue(issue)
         }
       }
     } catch (exception) {
       this.log(
-        `Error: ${exception}
+        `❌ Sorry, an error occurred: ${exception}
+        Query: \`${query}\`
         Result: ${JSON.stringify(result)}`
       )
     }
@@ -125,15 +132,16 @@ export default class Ls extends base {
         ' - ' + issue.fields.summary + (issue.fields.assignee ? ' @' + Colors.bold(issue.fields.assignee.key) : Colors.red(' UNASSIGNED')))
   }
 
-  async printIssueDetail(issue: Issue) {
+  async printIssueDetail(issue: Issue, printDescription: boolean) {
     this.log(
       `${Colors.bold(issue.key)}  - ${Colors.bold(issue.fields.summary)}
       Type: ${Colors.cyan(issue.fields.issuetype.name)}
       Created: ${Colors.magenta(new Date(issue.fields.created).toDateString())}
       Assigned: ${issue.fields.assignee ? '@' + Colors.bold(issue.fields.assignee.key) : Colors.red('UNASSIGNED') }
-
-      ${issue.fields.description || 'No description'}
-      `
+      URL: https://${base.config.subdomain}.atlassian.net/browse/${issue.key}`
     )
+    if (printDescription) {
+      this.log(`${issue.fields.description || 'No description'}`)
+   }
   }
 }
