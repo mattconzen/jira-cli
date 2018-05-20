@@ -25,9 +25,10 @@ export interface Issue {
   expand: string,
   id: string,
   self: string,
-  key: string
+  key: string,
   fields: {
     summary: string,
+    description: string,
     status: {
       description: string,
       name: string
@@ -67,7 +68,8 @@ export default class Ls extends base {
   static flags = {
     help: flags.help({char: 'h'}),
     all: flags.boolean({char: 'a'}),
-    type: flags.string({char: 't'})
+    type: flags.string({char: 't'}),
+    detail: flags.boolean({char: 'l'})
   }
 
   static args = [{name: 'file'}]
@@ -89,6 +91,8 @@ export default class Ls extends base {
       query = inProject + ' AND ' + inOpenSprint
     }
 
+    this.log(JSON.stringify(flags))
+
     const result = await WebRequest.json<JiraResponse>(
       encodeURI(uri + query + orderBy), {
         auth: {
@@ -99,14 +103,37 @@ export default class Ls extends base {
         jar: true
       }
     )
-    for (const issue of result.issues) {
-      this.printIssue(issue)
+    try {
+      for (const issue of result.issues) {
+        if (flags.flags.detail) {
+          this.printIssueDetail(issue)
+        } else {
+          this.printIssue(issue)
+        }
+      }
+    } catch (exception) {
+      this.log(
+        `Error: ${exception}
+        Result: ${JSON.stringify(result)}`
+      )
     }
   }
 
   async printIssue(issue: Issue) {
-    this.log(Colors.bold(issue.key) +
+      this.log(Colors.bold(issue.key) +
         ' : ' + Colors.cyan(issue.fields.issuetype.name) +
         ' - ' + issue.fields.summary + (issue.fields.assignee ? ' @' + Colors.bold(issue.fields.assignee.key) : Colors.red(' UNASSIGNED')))
+  }
+
+  async printIssueDetail(issue: Issue) {
+    this.log(
+      `${Colors.bold(issue.key)}  - ${Colors.bold(issue.fields.summary)}
+      Type: ${Colors.cyan(issue.fields.issuetype.name)}
+      Created: ${Colors.magenta(new Date(issue.fields.created).toDateString())}
+      Assigned: ${issue.fields.assignee ? '@' + Colors.bold(issue.fields.assignee.key) : Colors.red('UNASSIGNED') }
+
+      ${issue.fields.description || 'No description'}
+      `
+    )
   }
 }
