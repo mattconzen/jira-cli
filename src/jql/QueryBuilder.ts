@@ -12,6 +12,7 @@ export default class QueryBuilder {
     // starting with a no-op prevents us from having to check whether
     // AND would be appropriate or not for all other methods.
     this.query = "(category IS NOT null OR category IS null)"
+
     this.where = ''
     this.orderBy = ''
   }
@@ -41,7 +42,7 @@ export default class QueryBuilder {
   }
 
   isType(type: string) {
-    this.query += ` AND type = '${type}'`
+    this.query += ` AND type = '${type}' `
     return this;
   }
 
