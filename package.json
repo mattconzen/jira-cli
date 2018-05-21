@@ -34,6 +34,7 @@
     "nyc": "^11.8.0",
     "ts-node": "^6",
     "tslint": "^5",
+    "tslint-config-prettier": "^1.13.0",
     "typescript": "^2.8"
   },
   "engines": {
