@@ -1,18 +1,17 @@
 import * as WebRequest from 'web-request'
-import JiraResponse from '../models/JiraResponse';
 
-export default class JiraClient {
+import {JiraResponse} from '../models/JiraResponse'
 
-    token!: string;
-    email!: string;
+export class JiraClient {
+    token!: string
+    email!: string
 
     constructor(
         email: string,
         token: string,
-        flags: object
-    ) {
-        this.email = email;
-        this.token = token;
+) {
+        this.email = email
+        this.token = token
     }
 
     async jqlSearch(
@@ -20,7 +19,6 @@ export default class JiraClient {
         query: string,
         orderBy: string
     ) {
-        let response: string = ''
         const result = await WebRequest.json<JiraResponse>(
             encodeURI(uri + query + orderBy), {
             auth: {
@@ -31,6 +29,6 @@ export default class JiraClient {
             jar: true
             }
         )
-        return result;
+        return result
     }
 }

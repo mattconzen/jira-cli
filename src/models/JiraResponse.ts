@@ -1,6 +1,6 @@
-import Issue from '../models/Issue'
+import {Issue} from '../models/Issue'
 
-export default interface JiraResponse{
+export interface JiraResponse {
     expand: string,
     startAt: number,
     maxResults: number,

@@ -16,6 +16,7 @@
     "colors": "^1.2.5",
     "fs-extra": "^6.0.1",
     "global": "^4.3.2",
+    "prettier": "^1.12.1",
     "request": "^2.86.0",
     "tslib": "^1",
     "web-request": "^1.0.7"

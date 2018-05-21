@@ -1,4 +1,4 @@
-  export default interface Issue {
+  export interface Issue {
     expand: string,
     id: string,
     self: string,

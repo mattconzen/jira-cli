@@ -2,10 +2,10 @@ import {flags} from '@oclif/command'
 import * as Colors from 'colors'
 
 import base from '../base'
-import Issue from '../models/Issue'
-import JiraResponse from '../models/JiraResponse'
+import {JiraClient} from '../client/jira'
 import * as jql from '../jql/queries'
-import JiraClient from '../client/jira';
+import {Issue} from '../models/Issue'
+import {JiraResponse} from '../models/JiraResponse'
 
 ///
 //   Command: ls
@@ -33,7 +33,7 @@ export default class Ls extends base {
     const {email, token, project, subdomain} = base.config
     const uri = 'https://' + subdomain + '.atlassian.net/rest/api/2/search?jql= '
 
-    const client = new JiraClient(email, token, flags.flags)
+    const client = new JiraClient(email, token)
 
     let query = jql.assignedToCurrentUser + ' AND ' + jql.isOpen
     if (flags.flags.all) {
@@ -43,12 +43,12 @@ export default class Ls extends base {
     const result: JiraResponse = await client.jqlSearch(uri, query, jql.orderBy)
 
     try {
-      if (result.issues.length == 0) {
+      if (result.issues.length === 0) {
           this.log(
               `✗ Sorry, no issues were found with the given query:
               \`${query}\``)
-          if (query.includes("openSprints")) {
-              this.log("Is there a currently open sprint? 🤔")
+          if (query.includes('openSprints')) {
+              this.log('Is there a currently open sprint? 🤔')
           }
       }
 
