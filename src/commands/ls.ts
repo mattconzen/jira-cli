@@ -2,8 +2,8 @@ import { flags } from "@oclif/command";
 import * as Colors from "colors";
 
 import base from "../base";
-import { JiraClient } from "../client/jira";
-import * as jql from "../jql/queries";
+import { JiraClient } from "../client/JiraClient";
+import QueryBuilder from "../jql/QueryBuilder";
 import { Issue } from "../models/Issue";
 import { JiraResponse } from "../models/JiraResponse";
 
@@ -36,15 +36,26 @@ export default class Ls extends base {
 
     const client = new JiraClient(email, token);
 
-    let query = jql.assignedToCurrentUser + " AND " + jql.isOpen;
+    let queryBuilder: QueryBuilder = new QueryBuilder();
+
+    let query = queryBuilder.assignedToCurrentUser().isOpen().build();
     if (flags.flags.all) {
-      query = jql.inProject + " AND " + jql.inOpenSprint;
+      query = queryBuilder.inProject(project).inOpenSprint().build()
+    }
+
+    if (flags.flags.type) {
+      switch(flags.flags.type) {
+        case "story":
+        case "epic":
+          // query += jql.
+        default:
+          // Do nothing
+      }
     }
 
     const result: JiraResponse = await client.jqlSearch(
       uri,
-      query,
-      jql.orderBy
+      query
     );
 
     try {

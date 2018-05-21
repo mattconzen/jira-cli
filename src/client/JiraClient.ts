@@ -1,7 +1,7 @@
-import * as WebRequest from "web-request"
+import * as WebRequest from "web-request";
 
-import { Issue } from "../models/Issue"
-import { JiraResponse } from "../models/JiraResponse"
+import { Issue } from "../models/Issue";
+import { JiraResponse } from "../models/JiraResponse";
 
 export class JiraClient {
   token!: string;
@@ -13,23 +13,20 @@ export class JiraClient {
   }
 
   async fetchSingleIssue(uri: string, key: string) {
-    const result = await WebRequest.json<Issue>(
-      encodeURI(uri + key),
-      {
-        auth: {
-          user: this.email,
-          password: this.token,
-          sendImmediately: true
-        },
-        jar: true
-      }
-    );
+    const result = await WebRequest.json<Issue>(encodeURI(uri + key), {
+      auth: {
+        user: this.email,
+        password: this.token,
+        sendImmediately: true
+      },
+      jar: true
+    });
     return result;
   }
 
-  async jqlSearch(uri: string, query: string, orderBy: string) {
+  async jqlSearch(uri: string, query: string) {
     const result = await WebRequest.json<JiraResponse>(
-      encodeURI(uri + query + orderBy),
+      encodeURI(uri + query),
       {
         auth: {
           user: this.email,

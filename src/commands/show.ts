@@ -2,7 +2,7 @@ import { flags } from "@oclif/command";
 import * as Colors from "colors";
 
 import base from "../base";
-import { JiraClient } from "../client/jira";
+import { JiraClient } from "../client/JiraClient";
 import { Issue } from "../models/Issue";
 
 ///
@@ -18,36 +18,30 @@ export default class Show extends base {
   static description = "Show details for a specific task";
 
   static flags = {
-    help: flags.help({ char: "h" }),
+    help: flags.help({ char: "h" })
   };
 
-  static args = [{ name: 'issue' }];
+  static args = [{ name: "issue" }];
 
   async run() {
     const { email, token, subdomain } = base.config;
-    const { args } = this.parse(Show)
-    const uri =
-      "https://" + subdomain + ".atlassian.net/rest/api/2/issue/";
+    const { args } = this.parse(Show);
+    const uri = "https://" + subdomain + ".atlassian.net/rest/api/2/issue/";
 
     if (Show.args.length > 1) {
-      this.log(
-        `${Colors.red('✗')} This command only takes one argument. 1️⃣`
-      )
+      this.log(`${Colors.red("✗")} This command only takes one argument. 1️⃣`);
     }
 
     const client = new JiraClient(email, token);
 
-    let query = args.issue.trim()
+    let query = args.issue.trim();
 
-    const result: Issue = await client.fetchSingleIssue(
-      uri,
-      query
-    );
+    const result: Issue = await client.fetchSingleIssue(uri, query);
 
     try {
       if (result === undefined) {
         this.log(
-          `${Colors.red('✗')} Sorry, no issues were found with the given query:
+          `${Colors.red("✗")} Sorry, no issues were found with the given query:
               \`${query}\``
         );
         if (query.includes("openSprints")) {
@@ -56,11 +50,11 @@ export default class Show extends base {
       }
     } catch (exception) {
       this.log(
-        `${Colors.red('✗')} Sorry, an error occurred: ${exception}
+        `${Colors.red("✗")} Sorry, an error occurred: ${exception}
       Query: \`${query}\`
       Result: ${JSON.stringify(result)}`
       );
-      this.exit()
+      this.exit();
     }
 
     this.printIssueDetail(result, false);
@@ -91,7 +85,7 @@ export default class Show extends base {
       }
       URL: https://${base.config.subdomain}.atlassian.net/browse/${issue.key}
 
-${Colors.bold('Description:')}
+${Colors.bold("Description:")}
       ${issue.fields.description}
       `
     );
