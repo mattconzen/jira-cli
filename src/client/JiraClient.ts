@@ -3,6 +3,8 @@ import * as WebRequest from "web-request";
 import { Issue } from "../models/Issue";
 import { JiraResponse } from "../models/JiraResponse";
 
+import { Query } from "../jql/QueryBuilder";
+
 export class JiraClient {
   token!: string;
   email!: string;
@@ -24,9 +26,9 @@ export class JiraClient {
     return result;
   }
 
-  async jqlSearch(uri: string, query: string) {
+  async jqlSearch(uri: string, query: Query) {
     const result = await WebRequest.json<JiraResponse>(
-      encodeURI(uri + query),
+      encodeURI(uri + query.toString()),
       {
         auth: {
           user: this.email,

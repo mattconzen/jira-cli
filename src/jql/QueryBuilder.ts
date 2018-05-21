@@ -1,8 +1,20 @@
-//
-// JQL ORM-lite Query Builder
-//
+  //
+  // JQL ORM-lite Query Builder
+  //
 
-export default class QueryBuilder {
+ export class Query {
+  private query!: string;
+
+  constructor(query: string) {
+    this.query = query
+  }
+
+  toString() {
+    return this.query
+  }
+ }
+
+export class QueryBuilder {
   private query!: string;
   private where!: string;
   private orderBy!: string;
@@ -46,6 +58,6 @@ export default class QueryBuilder {
   }
 
   build() {
-    return `${this.query} ${this.orderBy}`;
+    return new Query(`${this.query} ${this.orderBy}`);
   }
-}
+ }

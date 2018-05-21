@@ -3,7 +3,7 @@ import * as Colors from "colors";
 
 import base from "../base";
 import { JiraClient } from "../client/JiraClient";
-import QueryBuilder from "../jql/QueryBuilder";
+import { Query, QueryBuilder } from "../jql/QueryBuilder";
 import { Issue } from "../models/Issue";
 import { JiraResponse } from "../models/JiraResponse";
 
@@ -49,26 +49,26 @@ export default class Ls extends base {
       queryBuilder = queryBuilder.isType(flags.flags.type)
     }
 
-    const query = queryBuilder.build()
+    const query: Query = queryBuilder.build();
     const result: JiraResponse = await client.jqlSearch(
       uri,
-      query
+      query.toString()
     );
 
     try {
       if (result.issues.length === 0) {
         this.log(
           `✗ Sorry, no issues were found with the given query:
-              \`${query}\``
+              \`${query.toString()}\``
         );
-        if (query.includes("openSprints")) {
+        if (query.toString().includes("openSprints")) {
           this.log("Hmm, is there a currently open sprint? 🤔");
         }
       }
     } catch (exception) {
       this.log(
         `✗ Sorry, an error occurred: ${exception}
-      Query: \`${query}\`
+      Query: \`${query.toString()}\`
       Result: ${JSON.stringify(result)}`
       );
     }
