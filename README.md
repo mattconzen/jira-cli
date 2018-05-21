@@ -22,7 +22,7 @@ USAGE
 ```
 <!-- usagestop -->
 # Setup
-You'll need a ~/.jirarc with:
+You'll need a ~/.jirarc with the contents below. You can get your API token at https://id.atlassian.com/manage/api-tokens
 ```
  { 
   "email": "email@email.com",
