@@ -13,7 +13,7 @@ export default class Show extends Command {
 
   static args = [{name: 'file'}]
 
-  async run() {
+   async run() {
     const {args, flags} = this.parse(Show)
 
     const name = flags.name || 'world'

@@ -52,7 +52,7 @@ export default class Ls extends base {
           }
       }
 
-  } catch (exception) {
+   } catch (exception) {
       this.log(
       `✗ Sorry, an error occurred: ${exception}
       Query: \`${query}\`

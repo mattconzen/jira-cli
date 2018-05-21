@@ -16,7 +16,7 @@
         key: string,
         emailAddress: string,
         displayName: string,
-        active: boolean
+         active: boolean
       },
       issuetype: {
         self: string,

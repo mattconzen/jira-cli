@@ -7,3 +7,4 @@ export interface JiraResponse {
     total: number,
     issues: Array<Issue>
   }
+
