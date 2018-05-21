@@ -52,7 +52,7 @@ export default class Ls extends base {
     const query: Query = queryBuilder.build();
     const result: JiraResponse = await client.jqlSearch(
       uri,
-      query.toString()
+      query
     );
 
     try {

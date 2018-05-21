@@ -21,7 +21,7 @@
     "web-request": "^1.0.7"
   },
   "devDependencies": {
-    "@oclif/dev-cli": "^1",
+    "@oclif/dev-cli": "^1.13.22",
     "@oclif/test": "^1",
     "@oclif/tslint": "^1",
     "@types/chai": "^4",
@@ -33,9 +33,9 @@
     "lint-staged": "^7.1.1",
     "mocha": "^5",
     "nyc": "^11.8.0",
+    "prettier": "^1.12.1",
     "ts-node": "^6",
     "tslint": "^5",
-    "prettier": "^1.12.1",
     "tslint-config-prettier": "^1.13.0",
     "typescript": "^2.8"
   },
@@ -58,7 +58,10 @@
     "bin": "jira",
     "plugins": [
       "@oclif/plugin-help"
-    ]
+    ],
+    "macos": { 
+      "identifier": "com.mattconzen.jiracli"
+    }
   },
   "repository": "mattconzen/jira-cli",
   "scripts": {
@@ -69,7 +72,10 @@
     "version": "oclif-dev readme && git add README.md"
   },
   "lint-staged": {
-    "*.{js,json,css,md}": ["prettier --write", "git add"]
+    "*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "types": "lib/index.d.ts"
 }
