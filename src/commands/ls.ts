@@ -48,7 +48,7 @@ export default class Ls extends base {
               `✗ Sorry, no issues were found with the given query:
               \`${query}\``)
           if (query.includes('openSprints')) {
-              this.log('Is there a currently open sprint? 🤔')
+              this.log('Hmm, is there a currently open sprint? 🤔')
           }
       }
 
