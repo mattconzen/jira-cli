@@ -13,7 +13,7 @@ import { JiraResponse } from "../models/JiraResponse";
 //   REST Example:
 //   curl -v
 //    https://sprout.atlassian.net/rest/api/2/search\?jql\=assignee\=currentuser\(\)
-//    --user matt.conzen@sproutsocial.com:frYKmMfUh8EhRcSPg4254101
+//    --user matt.conzen@sproutsocial.com:183518u518r1jt8
 ///
 
 export default class Ls extends base {
