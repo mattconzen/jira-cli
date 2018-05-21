@@ -36,23 +36,20 @@ export default class Ls extends base {
 
     const client = new JiraClient(email, token);
 
+    // By default, get open tasks assigned to the current user
     let queryBuilder: QueryBuilder = new QueryBuilder();
+    queryBuilder.assignedToCurrentUser().isOpen().build();
 
-    let query = queryBuilder.assignedToCurrentUser().isOpen().build();
     if (flags.flags.all) {
-      query = queryBuilder.inProject(project).inOpenSprint().build()
+      // If they passed in "--all", start with all in the current sprint instead
+      queryBuilder = queryBuilder.inProject(project).inOpenSprint()
     }
 
     if (flags.flags.type) {
-      switch(flags.flags.type) {
-        case "story":
-        case "epic":
-          // query += jql.
-        default:
-          // Do nothing
-      }
+      queryBuilder = queryBuilder.isType(flags.flags.type)
     }
 
+    const query = queryBuilder.build()
     const result: JiraResponse = await client.jqlSearch(
       uri,
       query

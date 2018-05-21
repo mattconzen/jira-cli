@@ -40,6 +40,11 @@ export default class QueryBuilder {
     return this;
   }
 
+  isType(type: string) {
+    this.query += ` AND type = '${type}'`
+    return this;
+  }
+
   build() {
     return `${this.query} ${this.where} ${this.orderBy}`;
   }
