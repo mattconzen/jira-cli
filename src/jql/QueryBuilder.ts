@@ -31,7 +31,7 @@ export default class QueryBuilder {
   }
 
   inProject(project: string) {
-    this.query += ` AND project='${project} `;
+    this.query += ` AND project='${project}' `;
     return this;
   }
 
