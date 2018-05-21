@@ -10,7 +10,6 @@ A simple CLI interface for JIRA
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g jira
 $ jira COMMAND
 running command...
 $ jira (-v|--version|version)
