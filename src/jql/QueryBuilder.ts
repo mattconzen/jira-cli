@@ -13,8 +13,7 @@ export default class QueryBuilder {
     // AND would be appropriate or not for all other methods.
     this.query = "(category IS NOT null OR category IS null)"
 
-    this.where = ''
-    this.orderBy = ''
+    this.orderBy = ' ORDER BY key '
   }
 
   get Query() {
@@ -47,6 +46,6 @@ export default class QueryBuilder {
   }
 
   build() {
-    return `${this.query} ${this.where} ${this.orderBy}`;
+    return `${this.query} ${this.orderBy}`;
   }
 }
