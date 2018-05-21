@@ -12,8 +12,8 @@ import { JiraResponse } from "../models/JiraResponse";
 //   Description: Fetches tasks currently assigned to you in JIRA.
 //   REST Example:
 //   curl -v
-//    https://sprout.atlassian.net/rest/api/2/search\?jql\=assignee\=currentuser\(\)
-//    --user matt.conzen@sproutsocial.com:183518u518r1jt8
+//    https://yourcompany.atlassian.net/rest/api/2/search\?jql\=assignee\=currentuser\(\)
+//    --user aperson@yourcompany.com:183518u518r1jt8
 ///
 
 export default class Ls extends base {
@@ -42,7 +42,7 @@ export default class Ls extends base {
 
     if (flags.flags.all) {
       // If they passed in "--all", start with all in the current sprint instead
-      queryBuilder = queryBuilder.inProject(project).inOpenSprint()
+      queryBuilder = new QueryBuilder().inProject(project).inOpenSprint()
     }
 
     if (flags.flags.type) {

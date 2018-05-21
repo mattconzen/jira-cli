@@ -10,8 +10,8 @@ import { Issue } from "../models/Issue";
 //   Description: Fetches details about a specific task, by task key.
 //   REST Example:
 //   curl -v
-//    curl -v https://sprout.atlassian.net/rest/api/2/issue/SHARE-9398
-//      --user  matt.conzen@sproutsocial.com:18g8uga8ae8gu8gua
+//    curl -v https://yourcompany.atlassian.net/rest/api/2/issue/SHARE-9398
+//      --user  aperson@yourcompany.com:18g8uga8ae8gu8gua
 ///
 
 export default class Show extends base {
