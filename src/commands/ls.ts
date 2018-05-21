@@ -1,8 +1,11 @@
 import {flags} from '@oclif/command'
 import * as Colors from 'colors'
-import * as WebRequest from 'web-request'
 
 import base from '../base'
+import Issue from '../models/Issue'
+import JiraResponse from '../models/JiraResponse'
+import * as jql from '../jql/queries'
+import JiraClient from '../client/jira';
 
 ///
 //   Command: ls
@@ -12,55 +15,6 @@ import base from '../base'
 //    https://sprout.atlassian.net/rest/api/2/search\?jql\=assignee\=currentuser\(\)
 //    --user matt.conzen@sproutsocial.com:frYKmMfUh8EhRcSPg4254101
 ///
-
-export interface JiraResponse {
-  expand: string,
-  startAt: number,
-  maxResults: number,
-  total: number,
-  issues: Array<Issue>
-}
-
-export interface Issue {
-  expand: string,
-  id: string,
-  self: string,
-  key: string,
-  fields: {
-    summary: string,
-    description: string,
-    status: {
-      description: string,
-      name: string
-    },
-    assignee: {
-      self: string,
-      name: string,
-      key: string,
-      emailAddress: string,
-      displayName: string,
-      active: boolean
-    },
-    issuetype: {
-      self: string,
-      id: number,
-      description: string,
-      name: string,
-      subtask: boolean,
-      avatarId: number
-    },
-    created: Date,
-  }
-}
-
-export enum IssueType {
-  platform = 'Platform Task',
-  web = 'Web Task',
-  design = 'Design Task',
-  qa = 'QA Task',
-  story = 'Story',
-  epic = 'Epic'
-}
 
 export default class Ls extends base {
   static description = 'List your currently assigned tasks'
@@ -79,51 +33,40 @@ export default class Ls extends base {
     const {email, token, project, subdomain} = base.config
     const uri = 'https://' + subdomain + '.atlassian.net/rest/api/2/search?jql= '
 
-    const assignedToCurrentUser = 'assignee=currentUser()'
-    const isOpen = 'resolution=Unresolved'
-    const inProject = 'project="' + project + '"'
-    const inOpenSprint = 'sprint in openSprints()'
+    const client = new JiraClient(email, token, flags.flags)
 
-    const orderBy = ' ORDER BY key '
-
-    let query = assignedToCurrentUser + ' AND ' + isOpen
+    let query = jql.assignedToCurrentUser + ' AND ' + jql.isOpen
     if (flags.flags.all) {
-      query = inProject + ' AND ' + inOpenSprint
+      query = jql.inProject + ' AND ' + jql.inOpenSprint
     }
 
-    const result = await WebRequest.json<JiraResponse>(
-      encodeURI(uri + query + orderBy), {
-        auth: {
-          user: email,
-          password: token,
-          sendImmediately: true
-        },
-        jar: true
-      }
-    )
+    const result: JiraResponse = await client.jqlSearch(uri, query, jql.orderBy)
+
     try {
       if (result.issues.length == 0) {
-        this.log(
-          `❌   Sorry, no issues were found with the given query:
-          \`${query}\``)
-        if (query.includes("openSprints")) {
-          this.log("Is there a currently open sprint? 🤔")
-        }
+          this.log(
+              `✗ Sorry, no issues were found with the given query:
+              \`${query}\``)
+          if (query.includes("openSprints")) {
+              this.log("Is there a currently open sprint? 🤔")
+          }
       }
-      for (const issue of result.issues) {
-        if (flags.flags.detail) {
-          this.printIssueDetail(issue, false)
-        } else {
-          this.printIssue(issue)
-        }
-      }
-    } catch (exception) {
+
+  } catch (exception) {
       this.log(
-        `❌ Sorry, an error occurred: ${exception}
-        Query: \`${query}\`
-        Result: ${JSON.stringify(result)}`
+      `✗ Sorry, an error occurred: ${exception}
+      Query: \`${query}\`
+      Result: ${JSON.stringify(result)}`
       )
-    }
+  }
+
+    for (const issue of result.issues) {
+      if (flags.flags.detail) {
+          this.printIssueDetail(issue, false)
+      } else {
+          this.printIssue(issue)
+      }
+      }
   }
 
   async printIssue(issue: Issue) {
