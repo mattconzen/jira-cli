@@ -23,7 +23,8 @@ export default class Ls extends base {
     help: flags.help({ char: "h" }),
     all: flags.boolean({ char: "a" }),
     type: flags.string({ char: "t" }),
-    detail: flags.boolean({ char: "l" })
+    detail: flags.boolean({ char: "l" }),
+    status: flags.string({ char: "s" })
   };
 
   static args = [{ name: "file" }];
@@ -49,6 +50,10 @@ export default class Ls extends base {
       queryBuilder = queryBuilder.isType(flags.flags.type)
     }
 
+    if (flags.flags.status) {
+      queryBuilder = queryBuilder.isInStatus(flags.flags.status)
+    }
+
     const query: Query = queryBuilder.build();
     const result: JiraResponse = await client.jqlSearch(
       uri,
@@ -58,19 +63,21 @@ export default class Ls extends base {
     try {
       if (result.issues.length === 0) {
         this.log(
-          `✗ Sorry, no issues were found with the given query:
+          `${Colors.red('✗')} Sorry, no issues were found with the given query:
               \`${query.toString()}\``
         );
         if (query.toString().includes("openSprints")) {
           this.log("Hmm, is there a currently open sprint? 🤔");
         }
+        this.exit()
       }
     } catch (exception) {
       this.log(
-        `✗ Sorry, an error occurred: ${exception}
+        `${Colors.red('✗')} Sorry, an error occurred: ${exception}
       Query: \`${query.toString()}\`
       Result: ${JSON.stringify(result)}`
       );
+      this.exit()
     }
 
     for (const issue of result.issues) {
@@ -87,6 +94,7 @@ export default class Ls extends base {
       Colors.bold(issue.key) +
         " : " +
         Colors.cyan(issue.fields.issuetype.name) +
+        Colors.bold(' [' + issue.fields.status.name + ']') +
         " - " +
         issue.fields.summary +
         (issue.fields.assignee
@@ -99,6 +107,7 @@ export default class Ls extends base {
     this.log(
       `${Colors.bold(issue.key)}  - ${Colors.bold(issue.fields.summary)}
       Type: ${Colors.cyan(issue.fields.issuetype.name)}
+      Status: ${Colors.bold(issue.fields.status.name)}
       Created: ${Colors.magenta(new Date(issue.fields.created).toDateString())}
       Assigned: ${
         issue.fields.assignee

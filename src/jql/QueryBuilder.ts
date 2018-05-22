@@ -57,6 +57,11 @@ export class QueryBuilder {
     return this;
   }
 
+  isInStatus(status: string) {
+    this.query += ` AND status = '${status}' `
+    return this;
+  }
+
   build() {
     return new Query(`${this.query} ${this.orderBy}`);
   }
