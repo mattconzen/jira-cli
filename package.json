@@ -1,7 +1,7 @@
 {
   "name": "jira",
   "description": "jira-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Matt Conzen @mattconzen",
   "bin": {
     "jira": "./bin/run"
@@ -59,7 +59,7 @@
     "plugins": [
       "@oclif/plugin-help"
     ],
-    "macos": { 
+    "macos": {
       "identifier": "com.mattconzen.jiracli"
     }
   },
