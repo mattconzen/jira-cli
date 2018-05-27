@@ -14,7 +14,7 @@ $ npm install -g jira
 $ jira COMMAND
 running command...
 $ jira (-v|--version|version)
-jira/0.0.3 darwin-x64 node-v8.9.1
+jira/0.1.0 darwin-x64 node-v8.9.1
 $ jira --help [COMMAND]
 USAGE
   $ jira COMMAND
@@ -64,14 +64,14 @@ USAGE
   $ jira ls [FILE]
 
 OPTIONS
-  -a, --all
+  -a, --all            show all tasks in active sprints
   -h, --help           show CLI help
-  -l, --detail
-  -s, --status=status
-  -t, --type=type
+  -l, --detail         show a more detailed view of each task 
+  -s, --status=status  filter tasks by status name (e.g. --status "Open")
+  -t, --type=type      filter tasks by type name (e.g. --type "Story" or --type "Epic")
 ```
 
-_See code: [src/commands/ls.ts](https://github.com/mattconzen/jira-cli/blob/v0.0.3/src/commands/ls.ts)_
+_See code: [src/commands/ls.ts](https://github.com/mattconzen/jira-cli/blob/v0.1.0/src/commands/ls.ts)_
 
 ## `jira show [ISSUE]`
 
@@ -84,6 +84,16 @@ USAGE
 OPTIONS
   -h, --help  show CLI help
 ```
+## `jira update`
 
-_See code: [src/commands/show.ts](https://github.com/mattconzen/jira-cli/blob/v0.0.3/src/commands/show.ts)_
+Update jira-cli to the latest version
+
+```
+USAGE
+  $ jira update 
+```
+
+
+
+_See code: [src/commands/show.ts](https://github.com/mattconzen/jira-cli/blob/v0.1.0/src/commands/show.ts)_
 <!-- commandsstop -->
