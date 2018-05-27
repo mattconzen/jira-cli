@@ -1,7 +1,7 @@
 {
   "name": "jira",
   "description": "jira-cli",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "author": "Matt Conzen @mattconzen",
   "bin": {
     "jira": "./bin/run"
@@ -14,6 +14,7 @@
     "@oclif/plugin-update": "^1.2.6",
     "@types/fs-extra": "^5.0.2",
     "@types/request": "^2.47.0",
+    "aws-sdk": "^2.247.1",
     "colors": "^1.2.5",
     "fs-extra": "^6.0.1",
     "global": "^4.3.2",
@@ -22,7 +23,7 @@
     "web-request": "^1.0.7"
   },
   "devDependencies": {
-    "@oclif/dev-cli": "^1.13.22",
+    "@oclif/dev-cli": "^1.13.23",
     "@oclif/test": "^1",
     "@oclif/tslint": "^1",
     "@types/chai": "^4",
@@ -58,10 +59,25 @@
     "commands": "./lib/commands",
     "bin": "jira",
     "plugins": [
-      "@oclif/plugin-help"
+      "@oclif/plugin-help",
+      "@oclif/plugin-update"
     ],
     "macos": {
       "identifier": "com.mattconzen.jiracli"
+    },
+    "update": {
+      "s3": {
+        "bucket": "jira-cli-releases",
+        "host": "http://jira-cli-releases.s3-website-us-west-2.amazonaws.com"
+      },
+      "node": {
+        "version": "8.9.1",
+        "targets": [
+          "darwin-x64",
+          "linux-x64",
+          "win32-x64"
+        ]
+      }
     }
   },
   "repository": "mattconzen/jira-cli",
