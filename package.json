@@ -11,6 +11,7 @@
     "@oclif/command": "^1",
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^1",
+    "@oclif/plugin-update": "^1.2.6",
     "@types/fs-extra": "^5.0.2",
     "@types/request": "^2.47.0",
     "colors": "^1.2.5",
