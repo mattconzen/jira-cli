@@ -6,33 +6,47 @@ import { JiraClient } from "../client/JiraClient";
 import { Issue } from "../models/Issue";
 
 ///
-//   Command: show
-//   Description: Fetches details about a specific task, by task key.
+//   Command: update
+//   Description: Update the status of a specific task, by task key.
 //   REST Example:
-//   curl -v
-//    curl -v https://yourcompany.atlassian.net/rest/api/2/issue/SHARE-9398
+//    curl -D- \
 //      --user  aperson@yourcompany.com:18g8uga8ae8gu8gua
+//    -X PUT
+//    -H "Content-Type: application/json"
+//    -- data '{ "fields": { "summary": "New Summary" }}'
+//    https://yourcompany.atlassian.net/rest/api/2/issue/SHARE-9398
 ///
 
 export default class Show extends base {
-  static description = "Show details for a specific task";
+  static description = "Update the status of a specific task";
 
   static flags = {
-    help: flags.help({ char: "h" })
+    help: flags.help({ char: "h" }),
   };
 
-  static args = [{ name: "issue" }];
+  static args = [{ name: "issue"}, { name: "status" }];
 
   async run() {
     const { email, token, subdomain, project } = base.config;
     const { args } = this.parse(Show);
 
-    if (Show.args.length > 1) {
-      this.log(`${Colors.red("✗")} This command only takes one argument. 1️⃣`);
+    if (Show.args.length !== 2) {
+      this.log(`${Colors.red("✗")} This command take exactly two arguments. 1️⃣`);
     }
 
     const client = new JiraClient(email, token, subdomain, project);
 
+    // Update the issue status
+    const updateResponse = await client.updateIssue(args.issue.trim(), args.status.trim());
+
+    if (updateResponse.constructor.name === "Error") {
+        this.log(
+            `${Colors.red("✗")} Something went wrong! ${updateResponse}`
+        );
+        this.exit();
+    }
+
+    // Fetch and print the updated issue
     let query = args.issue.trim();
 
     const result: Issue = await client.fetchSingleIssue(query);

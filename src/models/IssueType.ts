@@ -4,5 +4,6 @@ export enum IssueType {
   design = "Design Task",
   qa = "QA Task",
   story = "Story",
-  epic = "Epic"
+  epic = "Epic",
+  bug = "Bug"
 }

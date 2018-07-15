@@ -35,7 +35,7 @@ export default class Ls extends base {
     const uri =
       "https://" + subdomain + ".atlassian.net/rest/api/2/search?jql= ";
 
-    const client = new JiraClient(email, token);
+    const client = new JiraClient(email, token, subdomain, project);
 
     // By default, get open tasks assigned to the current user
     let queryBuilder: QueryBuilder = new QueryBuilder();
