@@ -14,7 +14,7 @@ $ npm install -g jira
 $ jira COMMAND
 running command...
 $ jira (-v|--version|version)
-jira/0.1.0 darwin-x64 node-v8.9.1
+jira/1.2.0 darwin-x64 node-v8.9.1
 $ jira --help [COMMAND]
 USAGE
   $ jira COMMAND
@@ -37,6 +37,7 @@ You'll need a ~/.jirarc with the contents below. You can get your API token at h
 * [`jira help [COMMAND]`](#jira-help-command)
 * [`jira ls [FILE]`](#jira-ls-file)
 * [`jira show [ISSUE]`](#jira-show-issue)
+* [`jira update [CHANNEL]`](#jira-update-channel)
 
 ## `jira help [COMMAND]`
 
@@ -64,14 +65,14 @@ USAGE
   $ jira ls [FILE]
 
 OPTIONS
-  -a, --all            show all tasks in active sprints
+  -a, --all
   -h, --help           show CLI help
-  -l, --detail         show a more detailed view of each task 
-  -s, --status=status  filter tasks by status name (e.g. --status "Open")
-  -t, --type=type      filter tasks by type name (e.g. --type "Story" or --type "Epic")
+  -l, --detail
+  -s, --status=status
+  -t, --type=type
 ```
 
-_See code: [src/commands/ls.ts](https://github.com/mattconzen/jira-cli/blob/v0.1.0/src/commands/ls.ts)_
+_See code: [src/commands/ls.ts](https://github.com/mattconzen/jira-cli/blob/v1.2.0/src/commands/ls.ts)_
 
 ## `jira show [ISSUE]`
 
@@ -84,16 +85,17 @@ USAGE
 OPTIONS
   -h, --help  show CLI help
 ```
-## `jira update`
 
-Update jira-cli to the latest version
+_See code: [src/commands/show.ts](https://github.com/mattconzen/jira-cli/blob/v1.2.0/src/commands/show.ts)_
+
+## `jira update [CHANNEL]`
+
+update the jira CLI
 
 ```
 USAGE
-  $ jira update 
+  $ jira update [CHANNEL]
 ```
 
-
-
-_See code: [src/commands/show.ts](https://github.com/mattconzen/jira-cli/blob/v0.1.0/src/commands/show.ts)_
+_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v1.2.6/src/commands/update.ts)_
 <!-- commandsstop -->

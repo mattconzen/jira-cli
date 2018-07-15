@@ -1,7 +1,7 @@
 {
-  "name": "jira",
+ "name": "jira",
   "description": "jira-cli",
-  "version": "0.2.0",
+  "version": "1.2.0",
   "author": "Matt Conzen @mattconzen",
   "bin": {
     "jira": "./bin/run"
@@ -67,8 +67,8 @@
     },
     "update": {
       "s3": {
-        "bucket": "jira-cli-releases",
-        "host": "http://jira-cli-releases.s3-website-us-west-2.amazonaws.com"
+        "bucket": "packages.mattconzen.com",
+        "host": "http://packages.mattconzen.com.s3-website-us-east-1.amazonaws.com"
       },
       "node": {
         "version": "8.9.1",
