@@ -66,7 +66,7 @@ export class JiraClient {
     }
 
     if (!validTransitions.has(status)) {
-      return Error(status + " doesn't appear to be a valid status");
+      return Error(status + " doesn't appear to be a valid status. \n\nValid statuses for this issue include: \n\n" +  Array.from(validTransitions.keys()).join("\n"));
     }
 
     const data =  '{ "transition": { "id": "' + validTransitions.get(status) + '"} }';

@@ -1,7 +1,7 @@
 {
  "name": "jira",
   "description": "jira-cli",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": "Matt Conzen @mattconzen",
   "bin": {
     "jira": "./bin/run"
